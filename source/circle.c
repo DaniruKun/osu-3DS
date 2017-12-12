@@ -6,6 +6,7 @@ int circleTextureID = 0;
 int circleOverlayID = 0;
 int circleHitID = 0;
 int approachCircleID = 0;
+int currentHitCircle = 0;
 float circleSize = 0.5f;
 
 //
@@ -36,7 +37,11 @@ void drawHit(int x, int y, int hitTexture) {
 	int centerY = y - (int)(25 * circleSize);
 	pp2d_draw_texture_scale(hitTexture, centerX, centerY, circleSize, circleSize);
 }
-void drawCircleHitandApproach(int x, int y, int hitTextureID) {
+void drawCircleHitandApproach(int x, int y, int hitTextureID, int curCircle) {
+	if (currentHitCircle != curCircle) {
+		currentHitCircle = curCircle;
+		resetForNext();
+	}
 	if (draw) {
 		drawCircle(x, y);
 	}
@@ -69,7 +74,9 @@ void drawCircleHitandApproach(int x, int y, int hitTextureID) {
 	approachSize -= 0.015f;
 }
 void resetForNext() {
+	draw = true;
 	approachSize = 1.0f;
+	extend = -10;
 }
 void setCircleTexture(int circle, int overlay, int hit, int approach) {
 	circleTextureID = circle;

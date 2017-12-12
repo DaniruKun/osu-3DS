@@ -50,7 +50,7 @@ int main() {
 
 		pp2d_begin_draw(GFX_BOTTOM);
 
-			//pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255,255,255,255), "osu!3DS");
+			pp2d_draw_text(0.01, 0.01, 0.01f, 0.01f, RGBA8(255,255,255,255), "osu!3DS");
 
 			drawCursor();
 			/*drawHit(70, 70, HIT_300);
@@ -58,16 +58,10 @@ int main() {
 			drawHit(90, 90, HIT_50);
 			drawHit(70, 90, HIT_0);*/
 			if (curTime >= 1000 && curTime <= 1750) {
-				drawCircleHitandApproach(30, 30, HIT_300);
-			}
-			if (curTime >= 1751 && curTime <= 1760) {
-				resetForNext();
+				drawCircleHitandApproach(30, 30, HIT_300, 1);
 			}
 			if (curTime >= 2000 && curTime <= 2750) {
-				drawCircleHitandApproach(100, 100, HIT_50);
-			}
-			if (curTime >= 2751 && curTime <= 2760) {
-				resetForNext();
+				drawCircleHitandApproach(100, 100, HIT_50, 2);
 			}
 		pp2d_end_draw();
 		curTime = osGetTime() - startTime;
