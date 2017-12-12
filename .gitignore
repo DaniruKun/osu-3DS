@@ -1,0 +1,13 @@
+# Don't commit our default skin or build directory
+/romfs/default/
+/build/
+
+# Also don't commit our precompiled binarys
+osu-3DS.3dsx
+osu-3DS.smdh
+osu-3DS.elf
+
+# Incase it uses "!" instead of "-"
+osu!3DS.3dsx
+osu!3DS.smdh
+osu!3DS.elf
