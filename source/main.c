@@ -50,7 +50,6 @@ int main() {
 		pp2d_begin_draw(GFX_BOTTOM);
 			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS | Playfield Test");
 
-			drawCursor();
 
 			drawHit(10, 25, HIT_300);
 			drawHit(10, 50, HIT_100);
@@ -63,6 +62,7 @@ int main() {
 				resetForNext();
 				startTime = osGetTime();
 			}
+			drawCursor();
 		pp2d_end_draw();
 
 		curTime = osGetTime() - startTime;
