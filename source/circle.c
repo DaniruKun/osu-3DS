@@ -17,6 +17,8 @@ double hit_range = 300;
 double hit_50 = 150;
 double hit_100 = 80;
 double hit_300 = 30;
+int currentMSTick = 0;
+long cStartTime = 0;
 
 void drawCircle(int x, int y) {
 	int centerX = x - (int)(64 * circleSize);
@@ -47,30 +49,35 @@ void drawHit(int x, int y, int score) {
 	pp2d_draw_texture_scale(hitTexture, centerX, centerY, circleSize, circleSize);
 }
 
-void drawCircleHitandApproach(int x, int y, int curCircle, long timing, long currentTiming, float approachRate) {
-	float rate = 6 - (.4 * approachRate);
-	if (currentTiming + (hit_range*rate) > timing && currentTiming - (hit_range*rate) < timing) {
-		if (currentTiming + (hit_range*rate) > timing && currentTiming - (hit_300*rate) < timing) {
+void drawCircleHitandApproach(int x, int y, int curCircle, long timing, long currentTiming, double approachRate) {
+	double pre = difficultyRange(approachRate, 1800, 1200, 450);
+	double actualApproachRate = pre > 1200 ? (1800 - pre) / 120 : (1200 - pre) / 150 + 5;
+	double approachTime = pre;
+	printf("\x1b[6;1HDEBUG:     %6f %6f", (float)approachTime, (float) pre);
+	if (currentTiming + (approachTime) > timing && currentTiming - (approachTime) < timing) {
+		if (currentTiming + (approachTime) > timing && currentTiming - (approachTime /10) < timing) {
+			if (cStartTime == 0) {
+				cStartTime = currentTiming;
+				currentMSTick = currentTiming - cStartTime;
+			}
 			drawCircle(x, y);
-			float msRate = rate * hit_range;
 			long difference = (currentTiming - timing);
-			/* AR0 1800ms before - 1f, 0ms 0.5f
-			AR1 1680ms before
-			AR2 1560ms before
-			AR3 1440ms before
-			*/
-			float currentApproachSize = 1.0f;
-			printf("\x1b[2;1HAS:     %6f  %6f", (float)difference, currentApproachSize);
-			drawApproach(x, y, currentApproachSize);
+			float doub = 2 * approachTime;
+			float currentApproachSize = (-1 * (difference / doub)) + 0.5;
+			printf("\x1b[2;1HAS:     %6ld %6f %6d", currentTiming, currentApproachSize, currentMSTick);
+			if (difference > (-1 * approachTime * hit_range) && difference < 0) {
+				currentMSTick = currentTiming - cStartTime;
+				drawApproach(x, y, currentApproachSize);
+			}
 		}
 		int score = 0;
-		if (currentTiming + (hit_300*rate) > timing && currentTiming - (0*rate) < timing) {
+		if (currentTiming + (approachTime / 10) > timing && currentTiming < timing) {
 			score = 300;
 		}
-		else if (currentTiming + (hit_100*rate) > timing && currentTiming - (hit_300*rate) < timing) {
+		else if (currentTiming + (approachTime / 3.75) > timing && currentTiming - (approachTime /10) < timing) {
 			score = 100;
 		}
-		else if (currentTiming + (hit_50*rate) > timing && currentTiming - (hit_100*rate) < timing) {
+		else if (currentTiming + (approachTime / 6) > timing && currentTiming - (approachTime /3.75) < timing) {
 			score = 50;
 		}
 		drawHit(x, y, score);
@@ -84,10 +91,20 @@ void resetForNext() {
 	draw = true;
 	approachSize = 1.0f;
 	extend = -10;
+	currentMSTick = 0;
+	cStartTime = 0;
 }
 
 void setCircleTexture(int circle, int overlay, int approach) {
 	circleTextureID = circle;
 	circleOverlayID = overlay;
 	approachCircleID = approach;
+}
+
+double difficultyRange(double difficulty, double min, double mid, double max) {
+	if (difficulty > 5)
+		return mid + (max - mid) * (difficulty - 5) / 5;
+	if (difficulty < 5)
+		return mid - (mid - min) * (5 - difficulty) / 5;
+	return mid;
 }
