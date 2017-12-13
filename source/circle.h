@@ -6,5 +6,5 @@ void drawApproach(int x, int y, float size);
 void drawHit(int x, int y, int hitTexture);
 void drawCircleHitandApproach(int x, int y, int hitTextureID, int curCircle);
 void resetForNext();
-void setCircleTexture(int circle, int overlay, int hit, int approach);
+void setCircleTexture(int circle, int overlay, int approach);
 #endif

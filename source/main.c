@@ -4,18 +4,18 @@
 #include "cursor.h"
 #include "circle.h"
 
-// assign ids for each texture
 #define CURSOR_TEXTURE 1
 #define HITCIRCLE_TEXTURE 2
 #define HITOVERLAY_TEXTURE 3
-#define HITSELECT_TEXTURE 4
-#define HITAPPROACH_TEXTURE 5
-#define HIT_300 6
-#define HIT_100 7
-#define HIT_50 8
-#define HIT_0 9
+#define HITAPPROACH_TEXTURE 4
+#define HIT_300 5
+#define HIT_100 6
+#define HIT_50 7
+#define HIT_0 8
+
 long long startTime = -1;
 long curTime;
+
 int main() {
 	if (startTime == -1) {
 		startTime = osGetTime();
@@ -33,14 +33,13 @@ int main() {
 	pp2d_load_texture_png(CURSOR_TEXTURE, "romfs:/default/cursor.png");
 	pp2d_load_texture_png(HITCIRCLE_TEXTURE, "romfs:/default/hitcircle.png");
 	pp2d_load_texture_png(HITOVERLAY_TEXTURE, "romfs:/default/hitcircleoverlay.png");
-	pp2d_load_texture_png(HITSELECT_TEXTURE, "romfs:/default/hitcircleselect.png");
 	pp2d_load_texture_png(HITAPPROACH_TEXTURE, "romfs:/default/approachcircle.png");
 	pp2d_load_texture_png(HIT_300, "romfs:/default/hit300.png");
 	pp2d_load_texture_png(HIT_100, "romfs:/default/hit100.png");
 	pp2d_load_texture_png(HIT_50, "romfs:/default/hit50.png");
 	pp2d_load_texture_png(HIT_0, "romfs:/default/hit0.png");
 	setCursorTexture(CURSOR_TEXTURE);
-	setCircleTexture(HITCIRCLE_TEXTURE, HITOVERLAY_TEXTURE, HITSELECT_TEXTURE, HITAPPROACH_TEXTURE);
+	setCircleTexture(HITCIRCLE_TEXTURE, HITOVERLAY_TEXTURE, HITAPPROACH_TEXTURE);
 
 	// Set our screen color
 	pp2d_set_screen_color(GFX_BOTTOM, ABGR8(255,52,52,52));
@@ -49,22 +48,25 @@ int main() {
 		hidScanInput();
 
 		pp2d_begin_draw(GFX_BOTTOM);
-
-			pp2d_draw_text(0.01, 0.01, 0.01f, 0.01f, RGBA8(255,255,255,255), "osu!3DS");
+			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS | Playfield Test");
 
 			drawCursor();
-			/*drawHit(70, 70, HIT_300);
-			drawHit(90, 70, HIT_100);
-			drawHit(90, 90, HIT_50);
-			drawHit(70, 90, HIT_0);*/
+
+			drawHit(10, 25, HIT_300);
+			drawHit(10, 50, HIT_100);
+			drawHit(10, 75, HIT_50);
+			drawHit(10, 100, HIT_0);
+
 			if (curTime >= 1000 && curTime <= 1750) {
-				drawCircleHitandApproach(30, 30, HIT_300, 1);
-			}
-			if (curTime >= 2000 && curTime <= 2750) {
-				drawCircleHitandApproach(100, 100, HIT_50, 2);
+				drawCircleHitandApproach(160, 120, HIT_300, 1);
+			} else if (curTime >= 2000 && curTime <= 2750) {
+				resetForNext();
+				startTime = osGetTime();
 			}
 		pp2d_end_draw();
+
 		curTime = osGetTime() - startTime;
+
 		printf("\x1b[1;1HTIME:     %6ld  %6lld", curTime, startTime);
 		printf("\x1b[2;1HTIME:     %6lld  %6lld", osGetTime(), (osGetTime() - startTime));
 		printf("\x1b[3;1HCPU:     %6.2f%%\x1b[K", C3D_GetProcessingTime()*6.0f);
