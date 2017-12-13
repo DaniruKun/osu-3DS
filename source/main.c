@@ -51,13 +51,13 @@ int main() {
 			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS | Playfield Test");
 
 
-			drawHit(10, 25, HIT_300);
-			drawHit(10, 50, HIT_100);
-			drawHit(10, 75, HIT_50);
-			drawHit(10, 100, HIT_0);
+			drawHit(10, 25, 300);
+			drawHit(10, 50, 100);
+			drawHit(10, 75, 50);
+			drawHit(10, 100, 0);
 
-			if (curTime >= 1000 && curTime <= 1750) {
-				drawCircleHitandApproach(160, 120, HIT_300, 1);
+			if (curTime >= 1000 && curTime <= 1770) {
+				drawCircleHitandApproach(160, 120, 1);
 			} else if (curTime >= 2000 && curTime <= 2750) {
 				resetForNext();
 				startTime = osGetTime();

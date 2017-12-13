@@ -27,13 +27,23 @@ void drawApproach(int x, int y, float size) {
 	pp2d_draw_texture_scale(approachCircleID, centerX, centerY, size, size);
 }
 
-void drawHit(int x, int y, int hitTexture) {
+void drawHit(int x, int y, int score) {
+	int hitTexture = 8;
+	if (score >= 300) {
+		hitTexture = 5;
+	}
+	else if (score < 300 && score >= 100) {
+		hitTexture = 6;
+	}
+	else if (score < 100 && score >= 50) {
+		hitTexture = 7;
+	}
 	int centerX = x - (int)(25 * circleSize);
 	int centerY = y - (int)(25 * circleSize);
 	pp2d_draw_texture_scale(hitTexture, centerX, centerY, circleSize, circleSize);
 }
 
-void drawCircleHitandApproach(int x, int y, int hitTextureID, int curCircle) {
+void drawCircleHitandApproach(int x, int y, int curCircle) {
 	if (currentHitCircle != curCircle) {
 		currentHitCircle = curCircle;
 		resetForNext();
@@ -56,7 +66,7 @@ void drawCircleHitandApproach(int x, int y, int hitTextureID, int curCircle) {
 
 	if (extend > (-1 * extendMax)) {
 		if (extend <= (int)(extendMax * 0.7) && extend >= (int)(-1 * extendMax * 0.5)) {
-			drawHit(x,  y, hitTextureID);
+			drawHit(x,  y, 300);
 		}
 
 		if (extend < 0) {
