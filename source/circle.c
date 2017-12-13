@@ -13,6 +13,10 @@ float approachSize = 1.0f;
 int extendMax = 10;
 int extend = -10;
 bool draw = true;
+double hit_range = 300;
+double hit_50 = 150;
+double hit_100 = 80;
+double hit_300 = 30;
 
 void drawCircle(int x, int y) {
 	int centerX = x - (int)(64 * circleSize);
@@ -43,46 +47,37 @@ void drawHit(int x, int y, int score) {
 	pp2d_draw_texture_scale(hitTexture, centerX, centerY, circleSize, circleSize);
 }
 
-void drawCircleHitandApproach(int x, int y, int curCircle) {
-	if (currentHitCircle != curCircle) {
-		currentHitCircle = curCircle;
+void drawCircleHitandApproach(int x, int y, int curCircle, long timing, long currentTiming, float approachRate) {
+	float rate = 6 - (.4 * approachRate);
+	if (currentTiming + (hit_range*rate) > timing && currentTiming - (hit_range*rate) < timing) {
+		if (currentTiming + (hit_range*rate) > timing && currentTiming - (hit_300*rate) < timing) {
+			drawCircle(x, y);
+			float msRate = rate * hit_range;
+			long difference = (currentTiming - timing);
+			/* AR0 1800ms before - 1f, 0ms 0.5f
+			AR1 1680ms before
+			AR2 1560ms before
+			AR3 1440ms before
+			*/
+			float currentApproachSize = 1.0f;
+			printf("\x1b[2;1HAS:     %6f  %6f", (float)difference, currentApproachSize);
+			drawApproach(x, y, currentApproachSize);
+		}
+		int score = 0;
+		if (currentTiming + (hit_300*rate) > timing && currentTiming - (0*rate) < timing) {
+			score = 300;
+		}
+		else if (currentTiming + (hit_100*rate) > timing && currentTiming - (hit_300*rate) < timing) {
+			score = 100;
+		}
+		else if (currentTiming + (hit_50*rate) > timing && currentTiming - (hit_100*rate) < timing) {
+			score = 50;
+		}
+		drawHit(x, y, score);
+	}
+	else {
 		resetForNext();
 	}
-
-	if (draw) {
-		drawCircle(x, y);
-	}
-
-	if (extend == (-1 * extendMax)) {
-		drawApproach(x, y, approachSize);
-	} else {
-		approachSize = 1.0f;
-	}
-
-	if (approachSize <= 0.45f) {
-		approachSize = 1.0f;
-		extend = extendMax;
-	}
-
-	if (extend > (-1 * extendMax)) {
-		if (extend <= (int)(extendMax * 0.7) && extend >= (int)(-1 * extendMax * 0.5)) {
-			drawHit(x,  y, 300);
-		}
-
-		if (extend < 0) {
-			draw = false;
-		} else {
-			// Not implemented, but this would normally zoom out the hit circle 
-		}
-
-		extend -= 1;
-	}
-
-	if (extend == (-1 * extendMax)) {
-		draw = true;
-	}
-
-	approachSize -= 0.015f;
 }
 
 void resetForNext() {

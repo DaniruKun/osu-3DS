@@ -56,10 +56,9 @@ int main() {
 			drawHit(10, 75, 50);
 			drawHit(10, 100, 0);
 
-			if (curTime >= 1000 && curTime <= 1770) {
-				drawCircleHitandApproach(160, 120, 1);
-			} else if (curTime >= 2000 && curTime <= 2750) {
-				resetForNext();
+
+			drawCircleHitandApproach(160, 120, 1, 3000, curTime, 8);
+			if (curTime >= 10000) {
 				startTime = osGetTime();
 			}
 			drawCursor();
@@ -68,7 +67,6 @@ int main() {
 		curTime = osGetTime() - startTime;
 
 		printf("\x1b[1;1HTIME:     %6ld  %6lld", curTime, startTime);
-		printf("\x1b[2;1HTIME:     %6lld  %6lld", osGetTime(), (osGetTime() - startTime));
 		printf("\x1b[3;1HCPU:     %6.2f%%\x1b[K", C3D_GetProcessingTime()*6.0f);
 		printf("\x1b[4;1HGPU:     %6.2f%%\x1b[K", C3D_GetDrawingTime()*6.0f);
 		printf("\x1b[5;1HCmdBuf:  %6.2f%%\x1b[K", C3D_GetCmdBufUsage()*100.0f);
