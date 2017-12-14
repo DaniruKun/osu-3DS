@@ -58,10 +58,12 @@ int main() {
 
 
 			drawCircleHitandApproach(160, 120, 1, 3000, curTime, 8);
+			drawCircleHitandApproach(130, 100, 1, 5000, curTime, 8);
+			drawCircleHitandApproach(190, 60, 1, 7000, curTime, 8);
 			if (curTime >= 10000) {
 				startTime = osGetTime();
 			}
-			drawCursor();
+			drawCursor(curTime);
 		pp2d_end_draw();
 
 		curTime = osGetTime() - startTime;

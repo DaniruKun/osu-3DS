@@ -13,12 +13,15 @@ float approachSize = 1.0f;
 int extendMax = 10;
 int extend = -10;
 bool draw = true;
+bool canClick = true;
 double hit_range = 300;
 double hit_50 = 150;
 double hit_100 = 80;
 double hit_300 = 30;
 int currentMSTick = 0;
 long cStartTime = 0;
+int circX = 0;
+int circY = 0;
 
 void drawCircle(int x, int y) {
 	int centerX = x - (int)(64 * circleSize);
@@ -50,49 +53,73 @@ void drawHit(int x, int y, int score) {
 }
 
 void drawCircleHitandApproach(int x, int y, int curCircle, long timing, long currentTiming, double approachRate) {
+	printf("\x1b[6;1HDEBUG:     %3d %3d", circX, circY);
 	double pre = difficultyRange(approachRate, 1800, 1200, 450);
 	double actualApproachRate = pre > 1200 ? (1800 - pre) / 120 : (1200 - pre) / 150 + 5;
-	double approachTime = pre;
-	printf("\x1b[6;1HDEBUG:     %6f %6f", (float)approachTime, (float) pre);
-	if (currentTiming + (approachTime) > timing && currentTiming - (approachTime) < timing) {
-		if (currentTiming + (approachTime) > timing && currentTiming - (approachTime /10) < timing) {
-			if (cStartTime == 0) {
-				cStartTime = currentTiming;
-				currentMSTick = currentTiming - cStartTime;
+	double inverseApproach = 11 - actualApproachRate;
+	double approachTime = difficultyRange(actualApproachRate, 1800, 1200, 450);
+	//printf("\x1b[6;1HDEBUG:     %6f %6f", (float)approachTime, (float)actualApproachRate);
+	if (currentTiming + (approachTime) + 100 > timing && currentTiming - (approachTime) < timing) {
+		if (draw) {
+			if (currentTiming + (approachTime)+100 > timing && currentTiming - (approachTime / 10) < timing) {
+				if (cStartTime == 0) {
+					cStartTime = currentTiming;
+					currentMSTick = currentTiming - cStartTime;
+				}
+				circX = x;
+				circY = y;
+				drawCircle(x, y);
+				long difference = (currentTiming - timing);
+				float doub = 2 * approachTime;
+				float currentApproachSize = (-1 * (difference / doub)) + 0.5;
+				//printf("\x1b[2;1HAS:     %6ld %6f %6d", currentTiming, currentApproachSize, currentMSTick);
+				if (difference > (-1 * approachTime * hit_range) && difference < 0) {
+					currentMSTick = currentTiming - cStartTime;
+					drawApproach(x, y, currentApproachSize);
+				}
+				else if (currentTiming + (approachTime) > timing && difference < 0) {
+					drawApproach(x, y, 1.0f);
+				}
 			}
-			drawCircle(x, y);
-			long difference = (currentTiming - timing);
-			float doub = 2 * approachTime;
-			float currentApproachSize = (-1 * (difference / doub)) + 0.5;
-			printf("\x1b[2;1HAS:     %6ld %6f %6d", currentTiming, currentApproachSize, currentMSTick);
-			if (difference > (-1 * approachTime * hit_range) && difference < 0) {
-				currentMSTick = currentTiming - cStartTime;
-				drawApproach(x, y, currentApproachSize);
+			int score = 0;
+			if (currentTiming + (hit_300 * inverseApproach) > timing && currentTiming - (hit_300 * inverseApproach) < timing) {
+				score = 300;
 			}
+			else if (currentTiming + (hit_100 * inverseApproach) > timing && currentTiming - (hit_100 * inverseApproach) < timing) {
+				score = 100;
+			}
+			else if (currentTiming + (hit_50 * inverseApproach) > timing && currentTiming - (hit_50 * inverseApproach) < timing) {
+				score = 50;
+			}
+			drawHit(x, y, score);
 		}
-		int score = 0;
-		if (currentTiming + (approachTime / 10) > timing && currentTiming < timing) {
-			score = 300;
-		}
-		else if (currentTiming + (approachTime / 3.75) > timing && currentTiming - (approachTime /10) < timing) {
-			score = 100;
-		}
-		else if (currentTiming + (approachTime / 6) > timing && currentTiming - (approachTime /3.75) < timing) {
-			score = 50;
-		}
-		drawHit(x, y, score);
 	}
 	else {
 		resetForNext();
 	}
 }
-
+void attemptClick(int x, int y, long currentTime) {
+	int xP = circX + (int)(64 * circleSize);
+	int xM = circX - (int)(64 * circleSize);
+	int yP = circY + (int)(64 * circleSize);
+	int yM = circY - (int)(64 * circleSize);
+	printf("\x1b[2;1HRANGE:     %3d %3d %3d %3d", xM, xP, yM, yP);
+	if (canClick) {
+		if (x < xP && x > xM && y < yP && y > yM) {
+			draw = false;
+			canClick = false;
+		}
+	}
+}
 void resetForNext() {
 	draw = true;
+	canClick = true;
 	approachSize = 1.0f;
 	extend = -10;
 	currentMSTick = 0;
 	cStartTime = 0;
+	circX = 0;
+	circY = 0;
 }
 
 void setCircleTexture(int circle, int overlay, int approach) {

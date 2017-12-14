@@ -8,4 +8,5 @@ void drawCircleHitandApproach(int x, int y, int curCircle, long timing, long cur
 void resetForNext();
 void setCircleTexture(int circle, int overlay, int approach);
 double difficultyRange(double difficulty, double min, double mid, double max);
+void attemptClick(int x, int y, long currentTime);
 #endif
