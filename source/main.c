@@ -48,7 +48,7 @@ int main() {
 		hidScanInput();
 
 		pp2d_begin_draw(GFX_BOTTOM);
-			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS | Playfield Test");
+			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS");
 
 
 			drawHit(10, 25, 300);

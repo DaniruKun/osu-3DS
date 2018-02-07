@@ -71,7 +71,7 @@ bool parseBeatmap(char* fileName) {
         	char* val1 = strtok(buf, ","); // X
         	char* val2 = strtok(NULL, ","); // Y
         	char* val3 = strtok(NULL, ","); // SongTime in MS
-			printf("%s\n", val1);
+			printf("%s %s %s\n", val1, val2, val3);
 		}
 	}
 
