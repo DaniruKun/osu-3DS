@@ -16,6 +16,8 @@
 long long startTime = -1;
 long curTime;
 
+int gameState = 0;
+
 int main() {
 	if (startTime == -1) {
 		startTime = osGetTime();
@@ -48,22 +50,22 @@ int main() {
 		hidScanInput();
 
 		pp2d_begin_draw(GFX_BOTTOM);
-			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS");
+			switch (gameState) {
+				// Main Menu
+				case 0:
+					drawMenu();
+				break;
 
+				// Song Selection
+				case 1:
+					// Not implemented
+				break;
 
-			drawHit(10, 25, 300);
-			drawHit(10, 50, 100);
-			drawHit(10, 75, 50);
-			drawHit(10, 100, 0);
-
-
-			drawCircleHitandApproach(160, 120, 1, 3000, curTime, 8);
-			drawCircleHitandApproach(130, 100, 1, 5000, curTime, 8);
-			drawCircleHitandApproach(190, 60, 1, 7000, curTime, 8);
-			if (curTime >= 10000) {
-				startTime = osGetTime();
+				// Playfield
+				case 2:
+					// Not implemented
+				break;
 			}
-			drawCursor(curTime);
 		pp2d_end_draw();
 
 		curTime = osGetTime() - startTime;
