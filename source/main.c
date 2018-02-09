@@ -53,7 +53,7 @@ int main() {
 			switch (gameState) {
 				// Main Menu
 				case 0:
-					drawMenu();
+					drawMenu(gameState);
 				break;
 
 				// Song Selection
