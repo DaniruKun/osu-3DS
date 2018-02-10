@@ -1,7 +1,9 @@
 #ifndef __CURSOR_H
 #define __CURSOR_H
 
-void drawCursor(long time);
-void setCursorTexture(int id);
+#define CURSOR_TEXTURE 1
+
+void initCursor();
+void drawCursor();
 
 #endif /* __CURSOR_H */
