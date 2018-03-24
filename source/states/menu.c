@@ -15,7 +15,7 @@ int drawMenu() {
 		&& touch.px < 57 + 203
 		&& touch.py > 12
 		&& touch.py < 12 + 203) {
-		return 1;
+		return 2;
 	}
 	pp2d_draw_texture_scale(MENU_OSU, 50, 5, 0.4f, 0.4f);
 	pp2d_draw_text(45, 220, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "Tap the circle to enter song selection!");

@@ -91,7 +91,7 @@ void drawCircleHitandApproach(int x, int y, int curCircle, long timing, long cur
 			else if (currentTiming + (hit_50 * inverseApproach) > timing && currentTiming - (hit_50 * inverseApproach) < timing) {
 				score = 50;
 			}
-			drawHit(x, y, score);
+			//drawHit(x, y, score);
 		}
 	}
 	else {

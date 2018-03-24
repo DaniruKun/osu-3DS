@@ -9,7 +9,7 @@ void initSong() {
 int drawSong() {
 	touchPosition touch;
 	hidTouchRead(&touch);
-	// Hacked in touch cords
+	// Hacked in touch cords///
 	if ((hidKeysHeld() & KEY_TOUCH)
 		&& touch.px > 11
 		&& touch.px < 11 + 152

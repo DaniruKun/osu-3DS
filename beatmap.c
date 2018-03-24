@@ -2,10 +2,11 @@
 #include <string.h>
 #include <errno.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "beatmap.h"
 #include "pp2d/pp2d.h"
 
-#define bufSize 32768
+#define bufSize 8000
 
 /*
  * Beatmap Section IDs:
@@ -20,6 +21,12 @@
  * 8 = HITOBJECTS
  */
 int beatmapSection;
+
+char *obj_x[1000];
+char *obj_y[1000];
+char *obj_songtime[1000];
+
+int elementObj = 0;
 
 bool parseBeatmap(char* fileName) {
 	FILE *beatmapFile;
@@ -71,10 +78,14 @@ bool parseBeatmap(char* fileName) {
         	char* val1 = strtok(buf, ","); // X
         	char* val2 = strtok(NULL, ","); // Y
         	char* val3 = strtok(NULL, ","); // SongTime in MS
-			printf("%s %s %s\n", val1, val2, val3);
+			obj_x[elementObj] = val1;
+			obj_y[elementObj] = val2;
+			obj_songtime[elementObj] = val3;
+			elementObj++;
 		}
 	}
 
 	beatmapSection = 0;
 	fclose(beatmapFile);
+	return true;
 }
