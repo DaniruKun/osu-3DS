@@ -2,6 +2,13 @@
 #include "pp2d/pp2d.h"
 #include "cursor.h"
 
+float cursor_Size     = 0.5f;
+int   cursor_X        = 0;
+int   cursor_Y        = 0;
+float cursor_Rotation = 0.0f;
+int   cursor_Extend   = 0;
+bool  cursor_Extended = false;
+
 void cursor_Initialize() {
 	pp2d_load_texture_png(CURSOR_TEXTURE, "romfs:/default/cursor.png");
 }
