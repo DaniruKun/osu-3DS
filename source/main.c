@@ -37,99 +37,7 @@ void loadSkin() {
 	setCircleTexture(HITCIRCLE_TEXTURE, HITOVERLAY_TEXTURE, HITAPPROACH_TEXTURE);
 }
 
-//
-#define bufSize 8000
-
-long long startTime = -1;
-long currentTime;
-
 int gameState = 0; // Our game state
-
-int beatmapSection;
-
-int obj_x[1000];
-int obj_y[1000];
-long obj_songtime[1000];
-
-int elementObj = 0;
-
-bool parseBeatmap(char* fileName) {
-	FILE *beatmapFile;
-	char buf[bufSize];
-
-	beatmapFile = fopen(fileName, "r");
-	if (!beatmapFile) {
-    	fprintf(stderr, "Failed to open file: (%i) %s\n", errno, strerror(errno));
-    	return 1;
-	}
-
-	while (fgets(buf, sizeof(buf), beatmapFile) != NULL) {
-		char* bufend = buf + strlen(buf);
-
-		if (bufend != buf) {
-		    if (*(--bufend) == '\n') *bufend = '\0';
-		    if (*(--bufend) == '\r') *bufend = '\0';
-		}
-
-		if (!*buf) continue;
-
-		if (!strcmp(buf, "[General]")) {
-			beatmapSection = 1;
-			continue;
-		} else if (!strcmp(buf, "[Editor]")) {
-			beatmapSection = 2;
-			continue;
-		} else if (!strcmp(buf, "[Metadata]")) {
-			beatmapSection = 3;
-			continue;
-		} else if (!strcmp(buf, "[Difficulty]")) {
-			beatmapSection = 4;
-			continue;
-		} else if (!strcmp(buf, "[Events]")) {
-			beatmapSection = 5;
-			continue;
-		} else if (!strcmp(buf, "[TimingPoints]")) {
-			beatmapSection = 6;
-			continue;
-		} else if (!strcmp(buf, "[Colours]")) {
-			beatmapSection = 7;
-			continue;
-		} else if (!strcmp(buf, "[HitObjects]")) {
-			beatmapSection = 8;
-			continue;
-		}
-
-		if (beatmapSection == 8) {
-        	char* val1 = strtok(buf, ","); // X
-        	char* val2 = strtok(NULL, ","); // Y
-        	char* val3 = strtok(NULL, ","); // SongTime in MS
-        	char *ptr;
-        	long ret;
-        	ret = strtol(val3, &ptr, 10);
-			obj_x[elementObj] = atoi(val1);
-			obj_y[elementObj] = atoi(val2);
-			obj_songtime[elementObj] = ret;
-			elementObj++;
-		}
-	}
-
-	beatmapSection = 0;
-	fclose(beatmapFile);
-	return true;
-}
-
-int lastX = 0;
-
-int indexOf(long *array, int array_size, long number) {
-    for (int i = 0; i < array_size; ++i) {
-        if (array[i] == number) {
-            return i;
-        }
-    }
-    return -1;
-}
-
-int oofer = 0;
 
 int main() {
 	// Set start time
@@ -138,7 +46,6 @@ int main() {
 	}
 
 	// Init
-	int a;
 	romfsInit();
 	pp2d_init();
 	consoleInit(GFX_TOP, NULL);
@@ -183,25 +90,6 @@ int main() {
 					break;
 				}
 			}*/
-			//for (a = 0; a < sizeof(obj_songtime); a++) {
-			oofer = indexOf(obj_songtime, sizeof(obj_songtime), currentTime);
-			//if ()
-				//if (obj_songtime[a] == currentTime) {
-					if (obj_x[oofer] != 0) {
-						lastX = obj_x[oofer];
-					}
-					char str[12];
-					sprintf(str, "%d", lastX);
-					pp2d_draw_text(50, 50, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), str);
-					if (obj_songtime[oofer] != 0) {
-						if (obj_x[oofer] != 0) {
-							if (obj_y[oofer] != 0) {
-								drawCircleHitandApproach(obj_x[oofer] / 10, obj_y[oofer] / 10, 1, currentTime + 2000, currentTime, 8);
-							}
-						}
-					}
-				//}
-			//}
 			drawCursor(); // Always draw cursor ontop of stuff
 		pp2d_end_draw();
 

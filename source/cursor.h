@@ -1,9 +1,9 @@
 #ifndef __CURSOR_H
 #define __CURSOR_H
 
-#define CURSOR_TEXTURE 1
+#define CURSOR_TEXTURE 001
 
-void initCursor();
-void drawCursor();
+void cursor_Initialize();
+void cursor_Draw();
 
 #endif /* __CURSOR_H */

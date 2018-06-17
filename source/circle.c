@@ -2,6 +2,8 @@
 #include "circle.h"
 #include "pp2d/pp2d.h"
 
+// This code probably needs to be rewritten IMHO
+
 int circleTextureID = 0;
 int circleOverlayID = 0;
 int circleHitID = 0;
