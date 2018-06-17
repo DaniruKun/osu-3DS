@@ -20,6 +20,10 @@ int       gameState = 0; // Our game state
 long long startTime = -1;
 long      currentTime;
 
+int Resize(int size) {
+	return (size * 5) >> 3;
+}
+
 int main() {
 	// Set start time
 	if (startTime == -1) {
@@ -41,13 +45,11 @@ int main() {
 		pp2d_begin_draw(GFX_BOTTOM);
 			pp2d_draw_text(0, 0, 0.5f, 0.5f, RGBA8(255, 255, 255, 255), "osu!3DS");
 
-			hitcircle_DrawHitCircleAndApproach(160, 120, 1, 1000, currentTime, 8);
-			hitcircle_DrawHitCircleAndApproach(130, 100, 1, 1500, currentTime, 8);
-			hitcircle_DrawHitCircleAndApproach(190, 60, 1, 2000, currentTime, 8);
+			// Beatmap C data
 
-			if (currentTime >= 2500) {
-				startTime = osGetTime();
-			}
+			//if (currentTime >= 2500) {
+			//	startTime = osGetTime();
+			//}
 
 			cursor_Draw(); // Always draw cursor on top of stuff
 		pp2d_end_draw();
